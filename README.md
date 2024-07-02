@@ -15,3 +15,12 @@ This is an app to track daily tasks and habits.
    ```sh
    git clone https://github.com/yourusername/task_tracker_app.git
    cd task_tracker_app
+
+## Usage
+
+### Run 
+
+```sh
+export PYTHONPATH=$(pwd)
+streamlit run ui/app
+```
