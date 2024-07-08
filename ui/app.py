@@ -1,7 +1,7 @@
 import streamlit as st
 from core.database import get_db_connection
 from features.auth import register_user, get_user_id
-from features.tasks import add_task, get_tasks, mark_task_completed
+from features.tasks import add_task, get_tasks, mark_task_completed, delete_task
 
 import plotly.graph_objs as go
 
@@ -22,7 +22,10 @@ if 'user_id' in st.session_state:
     # Add Task
     task_name = st.text_input("Enter task name:")
     if st.button("Add Task"):
-        add_task(user_id, task_name)
+        if task_name.strip():  # Check if the task is not blank
+            add_task(user_id, task_name)
+        else:
+            st.warning("Task name cannot be blank.")
 
     # Display Tasks
     tasks = get_tasks(user_id)
@@ -32,6 +35,16 @@ if 'user_id' in st.session_state:
         else:
             mark_task_completed(task['id'], False)
     
+    # Delete a Task Provided by the User
+    st.title("Delete Task")
+    task_to_delete = st.selectbox("Select a task to delete", [task['task_name'] for task in tasks if task['task_name'].strip()])
+    if st.button("Delete Task"):
+        for task in tasks:
+            if task['task_name'] == task_to_delete:
+                delete_task(task['id'])
+                st.success(f"Task '{task_to_delete}' deleted!")
+                break
+
 
     # Think each graph
 

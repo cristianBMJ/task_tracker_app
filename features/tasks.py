@@ -22,3 +22,11 @@ def mark_task_completed(task_id, completed):
         cursor = conn.cursor()
         cursor.execute('UPDATE tasks SET completed = ? WHERE id = ?', (int(completed), task_id))
         conn.commit()
+
+        
+def delete_task(task_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+    conn.commit()
+    conn.close()
