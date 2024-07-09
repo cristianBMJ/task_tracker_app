@@ -16,6 +16,15 @@ This is an app to track daily tasks and habits.
    git clone https://github.com/yourusername/task_tracker_app.git
    cd task_tracker_app
 
+## Install 
+
+Use it poetry 
+
+```sh
+poetry init
+poetry install
+```
+
 ## Usage
 
 ### Run 
