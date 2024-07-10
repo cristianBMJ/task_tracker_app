@@ -1,5 +1,5 @@
 import streamlit as st
-from core.database import get_db_connection
+from core.database import get_db_connection,save_daily_task_completion,get_daily_task_completion, update_task_history
 from features.auth import register_user, get_user_id
 from features.tasks import add_task, get_tasks, mark_task_completed, delete_task
 
@@ -32,9 +32,14 @@ if 'user_id' in st.session_state:
     for task in tasks:
         if st.checkbox(task['task_name'], key=task['id'], value=task['completed']):
             mark_task_completed(task['id'], True)
+            save_daily_task_completion(user_id, task['id'], True)
+            update_task_history()
+
         else:
             mark_task_completed(task['id'], False)
-    
+            save_daily_task_completion(user_id, task['id'], False)
+            update_task_history()
+
     # Delete a Task Provided by the User
     st.title("Delete Task")
     task_to_delete = st.selectbox("Select a task to delete", [task['task_name'] for task in tasks if task['task_name'].strip()])

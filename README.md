@@ -18,7 +18,26 @@ This is an app to track daily tasks and habits.
 
 ## Install 
 
-Use it poetry 
+Use it poetry. 
+
+Install Poetry if you don't have it:
+
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+Install the dependencies:
+
+```bash
+poetry install
+```
+
+Activate the virtual environment:
+
+```bash
+poetry shell
+
+
 
 ```sh
 poetry init
