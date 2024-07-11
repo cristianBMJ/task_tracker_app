@@ -8,6 +8,8 @@ authors = ["Cristian MB <cristianj3006@gmail.com>"]
 python = "^3.8"
 streamlit = "^1.0.0"
 altair = "^4.0.1"  # Adjust version as necessary
+plotly = "^5.22.0"
+matplotlib = "^3.9.1"
 
 
 [tool.poetry.dev-dependencies]

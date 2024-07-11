@@ -54,9 +54,7 @@ def initialize_database():
                 total_tasks INTEGER,
                 completed_tasks INTEGER,
                 completion_rate REAL,
-                FOREIGN KEY (user_id) REFERENCES users(id), 
-                FOREIGN KEY (task_id) REFERENCES tasks(id),
-                UNIQUE(user_id, date)
+                UNIQUE(user_id, date) 
             )
         ''')
         
@@ -92,40 +90,7 @@ def save_daily_task_completion(user_id, task_id, completed):
     conn.commit()
     conn.close()
 
-# def update_task_history():
-#     conn = get_db_connection()
-#     cursor = conn.cursor()
-    
-#     cursor.execute('''
-#         SELECT user_id, COUNT(*) as total_tasks, 
-#                SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END) as completed_tasks,
-#                date(completion_date) as completion_date
-#         FROM daily_task_completion
-#         GROUP BY user_id, date(completion_date)
-#     ''')
-    
-#     rows = cursor.fetchall()
-#     for row in rows:
-#         user_id = row['user_id']
-#         completion_date = row['completion_date']
-#         total_tasks = row['total_tasks']
-#         completed_tasks = row['completed_tasks']
-#         completion_rate = completed_tasks / total_tasks if total_tasks > 0 else 0
-        
-#         cursor.execute('''
-#             INSERT INTO task_history (user_id, date, total_tasks, completed_tasks, completion_rate) 
-#             VALUES (?, ?, ?, ?, ?)
-#             ON CONFLICT (user_id, date) DO UPDATE SET
-#             total_tasks=excluded.total_tasks,
-#             completed_tasks=excluded.completed_tasks,
-#             completion_rate=excluded.completion_rate
-#             ''',
-#             (user_id, completion_date, total_tasks, completed_tasks, completion_rate)
-#         )
-    
-#     conn.commit()
-#     conn.close()
-
+# #
 def update_task_history():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -149,7 +114,7 @@ def update_task_history():
         cursor.execute('''
             INSERT INTO task_history (user_id, date, total_tasks, completed_tasks, completion_rate)
             VALUES (?, ?, ?, ?, ?)
-            INSERT INTO (user_id, date) DO UPDATE SET
+            ON CONFLICT (user_id, date) DO UPDATE SET 
             total_tasks=excluded.total_tasks,
             completed_tasks=excluded.completed_tasks,
             completion_rate=excluded.completion_rate
@@ -160,6 +125,49 @@ def update_task_history():
     conn.commit()
     conn.close()
 
+def update_task_history_V2():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT user_id, COUNT(*) as total_tasks, 
+               SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END) as completed_tasks,
+               date(completion_date) as completion_date
+        FROM daily_task_completion
+        GROUP BY user_id, date(completion_date)
+    ''')
+    
+    rows = cursor.fetchall()
+    for row in rows:
+        user_id = row['user_id']
+        completion_date = row['completion_date']
+        total_tasks = row['total_tasks']
+        completed_tasks = row['completed_tasks']
+        completion_rate = completed_tasks / total_tasks if total_tasks > 0 else 0
+
+        # Check if the record already exists
+        cursor.execute('''
+            SELECT COUNT(*) FROM task_history WHERE user_id = ? AND date = ?
+        ''', (user_id, completion_date))
+        
+        exists = cursor.fetchone()[0]
+        
+        if exists:
+            # Update the existing record
+            cursor.execute('''
+                UPDATE task_history
+                SET total_tasks = ?, completed_tasks = ?, completion_rate = ?
+                WHERE user_id = ? AND date = ?
+            ''', (total_tasks, completed_tasks, completion_rate, user_id, completion_date))
+        else:
+            # Insert a new record
+            cursor.execute('''
+                INSERT INTO task_history (user_id, date, total_tasks, completed_tasks, completion_rate)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (user_id, completion_date, total_tasks, completed_tasks, completion_rate))
+    
+    conn.commit()
+    conn.close()
 
 
 # Update task history
