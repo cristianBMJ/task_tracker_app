@@ -36,13 +36,8 @@ Activate the virtual environment:
 
 ```bash
 poetry shell
-
-
-
-```sh
-poetry init
-poetry install
 ```
+
 
 ## Usage
 
@@ -50,5 +45,5 @@ poetry install
 
 ```sh
 export PYTHONPATH=$(pwd)
-streamlit run ui/app
+streamlit run ui/app.py
 ```
