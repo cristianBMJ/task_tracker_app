@@ -26,7 +26,7 @@ def initialize_database():
                 user_id INTEGER NOT NULL,
                 task_name TEXT NOT NULL,
                 completed INTEGER NOT NULL,
-                date TEXT NOT NULL,
+                date DATE,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
         ''')

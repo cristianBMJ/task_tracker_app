@@ -1,5 +1,6 @@
 from core.database import get_db_connection
-from datetime import datetime
+from datetime import datetime, date
+
 
 def add_task(user_id, task_name):
     with get_db_connection() as conn:
@@ -17,12 +18,14 @@ def get_tasks(user_id):
         tasks = cursor.fetchall()
         return [dict(task) for task in tasks]
 
+
 def mark_task_completed(task_id, completed):
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('UPDATE tasks SET completed = ? WHERE id = ?', (int(completed), task_id))
+        # Update the `completed` status and set the `date` to today's date
+        cursor.execute('UPDATE tasks SET completed = ?, date = ? WHERE id = ?', 
+                       (int(completed), str(date.today()), task_id))
         conn.commit()
-
         
 def delete_task(task_id):
     conn = get_db_connection()

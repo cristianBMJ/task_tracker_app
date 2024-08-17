@@ -1,3 +1,4 @@
+from datetime import date
 import streamlit as st
 from core.database import get_db_connection,save_daily_task_completion,get_daily_task_completion, update_task_history
 from features.auth import register_user, get_user_id
@@ -27,11 +28,39 @@ if 'user_id' in st.session_state:
         else:
             st.warning("Task name cannot be blank.")
 
+    # # Display Tasks
+    # tasks = get_tasks(user_id)
+    # for task in tasks:
+    #     if st.checkbox(task['task_name'], key=task['id'], value=task['completed']):
+    #         mark_task_completed(task['id'], True)
+    #         save_daily_task_completion(user_id, task['id'], True)
+    #         update_task_history()
+
+    #     else:
+    #         mark_task_completed(task['id'], False)
+    #         save_daily_task_completion(user_id, task['id'], False)
+    #         update_task_history()
+
     # Display Tasks
     tasks = get_tasks(user_id)
     for task in tasks:
+        # Get last completion date
+        task_last_completed_date = task.get('date')
+
+    # Display the values using Streamlit
+        today = str(date.today())
+        st.write(f"Task Last Completed Date: {task_last_completed_date}")
+        st.write(f"Today's Date: {today}")
+
+        # Reset task if it's a new day
+        if task_last_completed_date != str(date.today()):
+            mark_task_completed(task['id'], False)  # Reset to unchecked
+            task['completed'] = False  # Update in the current session too
+
+
+        # Display the task checkbox
         if st.checkbox(task['task_name'], key=task['id'], value=task['completed']):
-            mark_task_completed(task['id'], True)
+            mark_task_completed(task['id'], True) # update date
             save_daily_task_completion(user_id, task['id'], True)
             update_task_history()
 
@@ -39,6 +68,11 @@ if 'user_id' in st.session_state:
             mark_task_completed(task['id'], False)
             save_daily_task_completion(user_id, task['id'], False)
             update_task_history()
+
+        # if st.checkbox(task['task_name'], key=task['id'], value=task['completed']):
+        #     mark_task_completed(task['id'], True)  # Save checked state
+        # else:
+        #     mark_task_completed(task['id'], False)  # Save unchecked state
 
     # Delete a Task Provided by the User
     st.title("Delete Task")
