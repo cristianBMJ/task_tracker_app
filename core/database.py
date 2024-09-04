@@ -74,7 +74,7 @@ def get_daily_task_completion(user_id):
     conn.close()
     return rows
 
-def get_daily_task_history(user_id):
+def get_task_history(user_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(
