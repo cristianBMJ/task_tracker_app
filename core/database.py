@@ -74,6 +74,18 @@ def get_daily_task_completion(user_id):
     conn.close()
     return rows
 
+def get_daily_task_history(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT date, total_tasks, completed_tasks, completion_rate FROM task_history WHERE user_id = ? ORDER BY date",
+        (user_id,)
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+
 def save_daily_task_completion(user_id, task_id, completed):
     conn = get_db_connection()
     cursor = conn.cursor()

@@ -1,10 +1,11 @@
 from datetime import date
 import streamlit as st
-from core.database import get_db_connection,save_daily_task_completion,get_daily_task_completion, update_task_history
+from core.database import get_db_connection,save_daily_task_completion,get_daily_task_completion, update_task_history, get_daily_task_history
 from features.auth import register_user, get_user_id
 from features.tasks import add_task, get_tasks, mark_task_completed, delete_task
 
 import plotly.graph_objs as go
+import pandas as pd
 
 
 # User Registration/Login
@@ -85,8 +86,78 @@ if 'user_id' in st.session_state:
                 break
 
 
-    # Think each graph
+    # cumulative graph
+    daily_data = get_daily_task_completion(user_id)
 
+
+    # Assuming daily_data is a list of tuples (task_id, completion_date, completed)
+    df = pd.DataFrame(daily_data, columns=['task_id', 'completion_date', 'completed'])
+    df['completion_date'] = pd.to_datetime(df['completion_date'])
+
+    # Group by date and count cumulative completions
+    df = df[df['completed'] == 1]  # Filter only completed tasks
+    df_grouped = df.groupby('completion_date').size().cumsum().reset_index(name='cumulative_completions')
+
+
+    # Create the graph Cumulative Completions
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=df_grouped['completion_date'],
+        y=df_grouped['cumulative_completions'],
+        fill='tozeroy',  # Fill to the y-axis
+        mode='lines',
+        line=dict(color='purple')
+    ))
+
+    # Update layout
+    fig.update_layout(
+        title="Cumulative Task Completions Over Time",
+        xaxis_title="Date",
+        yaxis_title="Cumulative Completions",
+        yaxis_range=[0, max(df_grouped['cumulative_completions']) + 100]  # Adjust based on your data
+    )
+
+    # Display the graph in Streamlit
+    
+    st.plotly_chart(fig)
+
+
+    # Create the graph Cumulative from task_history
+    history_data = get_daily_task_history(user_id)
+    
+
+    # Assuming daily_data is a list of tuples (task_id, completion_date, completed)
+    df = pd.DataFrame(history_data, columns=['date', 'total_tasks', 'completed_tasks', 'completion_rate'] )
+    df['date'] = pd.to_datetime(df['date'])
+
+    # Create the graph Cumulative Completions
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=df['date'],
+        y=df['completion_rate'],
+        fill='tozeroy',  # Fill to the y-axis
+        mode='lines',
+        line=dict(color='purple')
+    ))
+
+    # Update layout
+    fig.update_layout(
+        title="Cumulative Task Completions Over Time",
+        xaxis_title="Date",
+        yaxis_title="Completions Rate",
+        yaxis_range=[0, max(df['completion_rate']) + 0.1]  # Adjust based on your data
+    )
+
+        # Display the graph in Streamlit
+    
+    st.plotly_chart(fig)
+
+    st.write(f"DONE!4")
+
+    
+
+
+    #######################
     total_tasks = len(tasks)
     completed_count = sum(task['completed'] for task in tasks)
     completion_percentage = (completed_count / total_tasks) * 100 if total_tasks > 0 else 0
