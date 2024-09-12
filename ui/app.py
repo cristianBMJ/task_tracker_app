@@ -29,18 +29,6 @@ if 'user_id' in st.session_state:
         else:
             st.warning("Task name cannot be blank.")
 
-    # # Display Tasks
-    # tasks = get_tasks(user_id)
-    # for task in tasks:
-    #     if st.checkbox(task['task_name'], key=task['id'], value=task['completed']):
-    #         mark_task_completed(task['id'], True)
-    #         save_daily_task_completion(user_id, task['id'], True)
-    #         update_task_history()
-
-    #     else:
-    #         mark_task_completed(task['id'], False)
-    #         save_daily_task_completion(user_id, task['id'], False)
-    #         update_task_history()
 
     # Display Tasks
     tasks = get_tasks(user_id)
@@ -50,8 +38,8 @@ if 'user_id' in st.session_state:
 
     # Display the values using Streamlit
         today = str(date.today())
-        st.write(f"Task Last Completed Date: {task_last_completed_date}")
-        st.write(f"Today's Date: {today}")
+        # st.write(f"Task Last Completed Date: {task_last_completed_date}")
+        # st.write(f"Today's Date: {today}")
 
         # Reset task if it's a new day
         if task_last_completed_date != str(date.today()):
@@ -105,11 +93,13 @@ if 'user_id' in st.session_state:
         line=dict(color='purple')
     ))
 
+    st.title("Progress")
+
     # Update layout
     fig.update_layout(
-        title="Cumulative Task Completions Over Time",
+        #title="Cumulative Task Completions Over Time",
         xaxis_title="Date",
-        yaxis_title="Completions Rate",
+        #yaxis_title="Completions Rate",
         yaxis_range=[0, max(df['completion_rate']) + 0.1]  # Adjust based on your data
     )
 
@@ -117,28 +107,23 @@ if 'user_id' in st.session_state:
     
     st.plotly_chart(fig)
 
-    st.write(f"DONE!4")
+    st.write(f"DONE!5")
 
     
 
 
     #######################
-    total_tasks = len(tasks)
-    completed_count = sum(task['completed'] for task in tasks)
-    completion_percentage = (completed_count / total_tasks) * 100 if total_tasks > 0 else 0
-
-    # Display Progress
-    st.title("Progress")
-    st.line_chart([task['completed'] for task in tasks])
-
+  
+    completion_percentage = df['completion_rate'].iloc[-1]*100   
+ 
     # Display Progress - Completion Percentage
-    st.title("Completion Percentage")
+    st.title("Completion Percentage %")
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=completion_percentage,
         title={'text': "Completion Percentage"},
         gauge={
-            'axis': {'range': [0, 100]},
+            'axis': {'range': [0, 100 ]},
             'bar': {'color': "blue"},
         }
     ))
