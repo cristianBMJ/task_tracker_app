@@ -21,6 +21,64 @@ if 'user_id' in st.session_state:
     user_id = st.session_state['user_id']
     st.title(f"Welcome, {username}!")
 
+    #Create the graph Cumulative from task_history
+    history_data = get_task_history(user_id)
+    
+
+    # Assuming daily_data is a list of tuples (task_id, completion_date, completed)
+    df = pd.DataFrame(history_data, columns=['date', 'total_tasks', 'completed_tasks', 'completion_rate'] )
+    df['date'] = pd.to_datetime(df['date'])
+
+    # Create the graph Cumulative Completions
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=df['date'],
+        y=df['completion_rate'],
+        fill='tozeroy',  # Fill to the y-axis
+        mode='lines',
+        line=dict(color='purple')
+    ))
+
+    st.title("Progress")
+
+    # Update layout
+    fig.update_layout(
+        #title="Cumulative Task Completions Over Time",
+        xaxis_title="Date",
+        #yaxis_title="Completions Rate",
+        yaxis_range=[0, max(df['completion_rate']) + 0.1]  # Adjust based on your data
+    )
+
+    # Display the graph in Streamlit
+    
+    st.plotly_chart(fig)
+
+    st.write(f"DONE!6")
+
+    
+
+
+    #######################
+  
+    completion_percentage = df['completion_rate'].iloc[-1]*100   
+ 
+    # Display Progress - Completion Percentage
+    st.title("Completion Percentage %")
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=completion_percentage,
+        title={'text': "Completion Percentage"},
+        gauge={
+            'axis': {'range': [0, 100 ]},
+            'bar': {'color': "blue"},
+        }
+    ))
+    st.plotly_chart(fig)
+
+
+
+
+
     # Add Task
     task_name = st.text_input("Enter task name:")
     if st.button("Add Task"):
@@ -75,56 +133,4 @@ if 'user_id' in st.session_state:
 
 
 
-    # Create the graph Cumulative from task_history
-    history_data = get_task_history(user_id)
-    
-
-    # Assuming daily_data is a list of tuples (task_id, completion_date, completed)
-    df = pd.DataFrame(history_data, columns=['date', 'total_tasks', 'completed_tasks', 'completion_rate'] )
-    df['date'] = pd.to_datetime(df['date'])
-
-    # Create the graph Cumulative Completions
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=df['date'],
-        y=df['completion_rate'],
-        fill='tozeroy',  # Fill to the y-axis
-        mode='lines',
-        line=dict(color='purple')
-    ))
-
-    st.title("Progress")
-
-    # Update layout
-    fig.update_layout(
-        #title="Cumulative Task Completions Over Time",
-        xaxis_title="Date",
-        #yaxis_title="Completions Rate",
-        yaxis_range=[0, max(df['completion_rate']) + 0.1]  # Adjust based on your data
-    )
-
-    # Display the graph in Streamlit
-    
-    st.plotly_chart(fig)
-
-    st.write(f"DONE!5")
-
-    
-
-
-    #######################
-  
-    completion_percentage = df['completion_rate'].iloc[-1]*100   
- 
-    # Display Progress - Completion Percentage
-    st.title("Completion Percentage %")
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=completion_percentage,
-        title={'text': "Completion Percentage"},
-        gauge={
-            'axis': {'range': [0, 100 ]},
-            'bar': {'color': "blue"},
-        }
-    ))
-    st.plotly_chart(fig)
+    #
