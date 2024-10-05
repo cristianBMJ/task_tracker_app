@@ -1,6 +1,6 @@
 # Task Tracker App
 
-This is an app to track daily tasks and habits.
+This is an prototype app to track daily tasks and habits.
 
 ## Features
 - Task (habit) management
