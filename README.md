@@ -11,10 +11,12 @@ This is an app to track daily tasks and habits.
 
 ## Setup
 
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/task_tracker_app.git
-   cd task_tracker_app
+Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/task_tracker_app.git
+cd task_tracker_app
+```
 
 ## Install 
 
