@@ -73,7 +73,11 @@ if 'user_id' in st.session_state:
 
     #######################
   
-    completion_percentage = df['completion_rate'].iloc[-1]*100   
+     # Calculate Completion Percentage
+    if not df.empty and not df['completion_rate'].empty:
+        completion_percentage = df['completion_rate'].iloc[-1] * 100
+    else:
+        completion_percentage = 0  # Set to zero if no data is available   
  
     # Display Progress - Completion Percentage
     st.title("Completion Percentage %")
