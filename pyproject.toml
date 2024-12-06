@@ -5,7 +5,7 @@ description = "An app to track daily tasks and habits"
 authors = ["Cristian MB <cristianj3006@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.9,<4.0"
 streamlit = "^1.0.0"
 altair = "^4.0.1"  # Adjust version as necessary
 plotly = "^5.22.0"

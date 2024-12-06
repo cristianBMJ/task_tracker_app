@@ -53,7 +53,7 @@ if 'user_id' in st.session_state:
     
     st.plotly_chart(fig)
 
-    st.write(f"DONE!6")
+    st.write(f"DONE!")
 
     
 
