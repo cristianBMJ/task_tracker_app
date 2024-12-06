@@ -45,8 +45,7 @@ if 'user_id' in st.session_state:
         line=dict(color='purple')
     ))
 
-    max_completion_rate = max(df['completion_rate'])
-    st.write(f"Max Completion Rate: {max_completion_rate}")
+
 
 
     st.title("Progress")
