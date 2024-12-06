@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the path to the core module
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../path/to/core')))
+
 from datetime import date
 import streamlit as st
 from core.database import get_db_connection,save_daily_task_completion,get_daily_task_completion, update_task_history, get_task_history
