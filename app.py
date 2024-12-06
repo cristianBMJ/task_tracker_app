@@ -47,13 +47,20 @@ if 'user_id' in st.session_state:
 
     st.title("Progress")
 
-    # Update layout
+       # Create the graph Cumulative Completions
+    fig = go.Figure()
+    
+    # Check if the DataFrame is not empty before calculating max
+    if not df.empty and not df['completion_rate'].empty:
+        yaxis_range = [0, max(df['completion_rate']) + 0.1]  # Adjust based on your data
+    else:
+        yaxis_range = [0, 1]  # Default range if no data is available
+
     fig.update_layout(
-        #title="Cumulative Task Completions Over Time",
         xaxis_title="Date",
-        #yaxis_title="Completions Rate",
-        yaxis_range=[0, max(df['completion_rate']) + 0.1]  # Adjust based on your data
-    )
+        yaxis_range=yaxis_range  # Use the calculated or default range
+    ) 
+
 
     # Display the graph in Streamlit
     
