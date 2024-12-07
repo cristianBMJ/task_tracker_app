@@ -1,8 +1,12 @@
 from core.database import get_db_connection
 from datetime import datetime, date
+import streamlit as st
 
 
 def add_task(user_id, task_name):
+    if user_id is None:
+        st.error("User ID is not set. Cannot add task.")
+        return
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute('''
