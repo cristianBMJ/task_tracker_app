@@ -1,5 +1,6 @@
 from core.database import get_db_connection
 import sqlite3
+import streamlit as st  # Import Streamlit
 
 def register_user(username):
     with get_db_connection() as conn:
@@ -7,8 +8,10 @@ def register_user(username):
         try:
             cursor.execute('INSERT INTO users (username) VALUES (?)', (username,))
             conn.commit()
+            st.success("User registered successfully!")  # Show success message
             return True  # Indicate success
         except sqlite3.IntegrityError:
+            st.error("Username already exists. Please choose a different one.")  # Show error message
             return False  # Indicate that the username already exists
 
 def get_user_id(username):
