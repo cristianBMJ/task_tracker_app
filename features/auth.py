@@ -19,4 +19,5 @@ def get_user_id(username):
         cursor = conn.cursor()
         cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
         user = cursor.fetchone()
-        return user['id'] if user else None
+        return user[0] if user else None  # Access the first element of the tuple
+        #return user['id'] if user else None
