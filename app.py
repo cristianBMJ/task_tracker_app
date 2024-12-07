@@ -26,7 +26,8 @@ if st.sidebar.button("Login"):
 if 'user_id' in st.session_state:
     user_id = st.session_state['user_id']
     st.title(f"Welcome, {username}!")
-    st.write(f"See  user id in session state {user_id} and direct get_user_id function {get_user_id(username)}")
+    # check user id
+    # st.write(f"See  user id in session state {user_id} and direct get_user_id function {get_user_id(username)}")
 
     #Create the graph Cumulative from task_history
     history_data = get_task_history(user_id)
