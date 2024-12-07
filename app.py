@@ -97,12 +97,16 @@ if 'user_id' in st.session_state:
 
 
     # Add Task
-    task_name = st.text_input("Enter task name:")
-    if st.button("Add Task"):
-        if task_name.strip():  # Check if the task is not blank
-            add_task(user_id, task_name)
-        else:
-            st.warning("Task name cannot be blank.")
+    if 'user_id' not in st.session_state:
+        st.warning("You must be logged in to add a task.")
+    else:
+        user_id = st.session_state['user_id']
+        task_name = st.text_input("Enter task name:")
+        if st.button("Add Task"):
+            if task_name.strip():
+                add_task(user_id, task_name)
+            else:
+                st.warning("Task name cannot be blank.")
 
 
     # Display Tasks
