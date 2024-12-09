@@ -1,6 +1,6 @@
 # Task Tracker App
 
-This is an prototype app to track daily tasks and habits.
+This is an prototype app to track daily tasks and habits. You can see version Beta [here.](https://task-tracker-app.streamlit.app/)
 
 ## Features
 - Task (habit) management
