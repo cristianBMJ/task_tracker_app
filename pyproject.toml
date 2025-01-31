@@ -3,6 +3,8 @@ name = "task_tracker_app"
 version = "0.1.0"
 description = "An app to track daily tasks and habits"
 authors = ["Cristian MB <cristianj3006@gmail.com>"]
+packages = [{include = "ui"}]  # Asegúrate de que el nombre coincida con tu código fuente
+
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
