@@ -49,3 +49,17 @@ poetry shell
 export PYTHONPATH=$(pwd)
 streamlit run ui/app.py
 ```
+
+## Contributing
+
+We welcome contributions to improve the Task Tracker App! Here's how you can contribute:
+
+1. **Fork the repository**  
+   Click the "Fork" button on the top-right corner of this repository to create your own copy.
+
+2. **Clone your fork**  
+   Clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/yourusername/task_tracker_app.git
+   cd task_tracker_app
+
